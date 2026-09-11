@@ -13,7 +13,7 @@ class Student(BaseModel):
     course: str
 
 
-# CREATE student
+
 @app.post("/student")
 def create_student(student: Student):
 
@@ -25,11 +25,11 @@ def create_student(student: Student):
     }
 
 
-# VIEW / SEARCH student by name
+
 @app.get("/student")
 def get_students(name: Optional[str] = None):
 
-    # Search by name
+   
     if name:
         for student in students:
             if student.name.lower() == name.lower():
@@ -39,11 +39,11 @@ def get_students(name: Optional[str] = None):
             "error": "student nahi hai"
         }
 
-    # View all students
+    
     return students
 
 
-# UPDATE student by name
+
 @app.put("/student/{name}")
 def update_student(name: str, student: Student):
 
@@ -63,7 +63,7 @@ def update_student(name: str, student: Student):
     }
 
 
-# DELETE student by name
+
 @app.delete("/student/{name}")
 def delete_student(name: str):
 
