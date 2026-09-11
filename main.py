@@ -7,26 +7,25 @@ app = FastAPI()
 students = []
 
 
-# Pydantic model
 class Student(BaseModel):
     name: str
     email: str
     course: str
 
 
-# to create student
+# CREATE student
 @app.post("/student")
 def create_student(student: Student):
 
     students.append(student)
 
     return {
-        "message": "student bn gya successfully",
+        "message": "student ban gaya successfully",
         "student": student
     }
 
 
-# view/search by name
+# VIEW / SEARCH student by name
 @app.get("/student")
 def get_students(name: Optional[str] = None):
 
@@ -37,47 +36,48 @@ def get_students(name: Optional[str] = None):
                 return student
 
         return {
-            "error": "student nhai hai "
+            "error": "student nahi hai"
         }
 
     # View all students
     return students
 
 
+# UPDATE student by name
+@app.put("/student/{name}")
+def update_student(name: str, student: Student):
 
+    for i in range(len(students)):
 
+        if students[i].name.lower() == name.lower():
 
-#uodate
-@app.put("/student/{id}")
-def update_student(id: int, student: Student):
+            students[i] = student
 
-    if id >= len(students):
-        return {
-            "error": "student nhai hai"
-        }
-
-    students[id] = student
+            return {
+                "message": "student update ho gaya successfully",
+                "student": student
+            }
 
     return {
-        "message": "student bna gya successfully",
-        "student": student
+        "error": "student nahi hai"
     }
 
 
-############ delete krne ke liye use krte hai 
+# DELETE student by name
+@app.delete("/student/{name}")
+def delete_student(name: str):
 
-#use kr rhe hai decorator ka  http commands ko handle krke function execute hoga
-@app.delete("/student/{id}")
-def delete_student(id: int):
+    for i in range(len(students)):
 
-    if id >= len(students):
-        return {
-            "error": "student not found"
-        }
+        if students[i].name.lower() == name.lower():
 
-    student = students.pop(id)
+            student = students.pop(i)
+
+            return {
+                "message": "student deleted successfully",
+                "student": student
+            }
 
     return {
-        "message": "student deleted successfully",
-        "student": student
+        "error": "student nahi hai"
     }
